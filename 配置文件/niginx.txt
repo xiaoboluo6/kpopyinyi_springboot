@@ -1,0 +1,42 @@
+    # kpop-service的nginx配置
+    server {
+        listen             9002;
+        server_name  localhost;
+        
+        # 图片访问路径  
+        # 直接访问http://localhost:9002/singerAvatar/2024-01-05/20240105094628cf2677b133c24c21b90aceb612c3583d.png
+        location /singerAvatar/ {
+            root F:/java_project/kpopyinyi/resource;
+        }
+        location /songCover/ {
+            root F:/java_project/kpopyinyi/resource;
+        }
+        location /bannerPicture/ {
+            root F:/java_project/kpopyinyi/resource;
+        }
+        location /memberAvatar/ {
+            root F:/java_project/kpopyinyi/resource;
+        }
+
+        location ~ /kpopservice/ {
+               proxy_pass  http://localhost:8001;
+        }
+
+        location ~ /verificationCode/ {
+               proxy_pass  http://localhost:8002;
+        }
+
+        location ~ /usercenter/ {
+               proxy_pass  http://localhost:8003;
+        }
+
+        location ~ /interaction/ {
+               proxy_pass  http://localhost:8004;
+        }
+
+        location ~ /managecenter/ {
+               proxy_pass  http://localhost:8005;
+        }
+
+
+    }
