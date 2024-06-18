@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhangmingjian.kpopservice.mapper.KpopSingerFavouriteMapper">
+
+    <select id="getFavouriteSingerList" resultType="com.zhangmingjian.kpopservice.entity.vo.SingerFavouriteListVo">
+        SELECT
+            sf.id,
+            s.id AS singerId,
+            s.name AS singerName,
+            s.avatar,
+            s.description
+        FROM
+            kpop_singer_favourite sf
+                JOIN
+            kpop_singer s ON sf.singer_id = s.id
+        WHERE
+            sf.is_deleted = 0;
+    </select>
+
+
+</mapper>
+

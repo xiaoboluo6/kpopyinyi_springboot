@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhangmingjian.kpopservice.mapper.KpopBannerMapper">
+
+
+    <select id="getBannerInfoListShow" resultType="com.zhangmingjian.kpopservice.entity.vo.BannerListVo">
+        select
+            banner.id AS id,
+            banner.title AS title,
+            banner.image_url AS imageUrl,
+            banner.is_show AS isShow,
+            banner.sort AS sort,
+            song.singer_name AS singerName,
+            song.name AS songName
+        FROM
+            kpop_banner banner
+                INNER JOIN
+            kpop_song song ON banner.song_id = song.id
+        WHERE
+            banner.is_deleted = 0
+    </select>
+
+
+    <update id="turnOffById" parameterType="java.lang.String">
+        UPDATE kpop_banner
+        SET is_show = 0
+        WHERE id = #{bannerId}
+    </update>
+
+    <update id="turnOnById" parameterType="java.lang.String">
+        UPDATE kpop_banner
+        SET is_show = 1
+        WHERE id = #{bannerId}
+    </update>
+
+
+
+    <select id="getSongStatusByBannerId" resultType="java.lang.Integer">
+        SELECT
+            song. STATUS
+        FROM
+            kpop_song song
+                INNER JOIN kpop_banner banner ON song.id = banner.song_id
+        WHERE
+            banner.id = #{bannerId}
+    </select>
+
+</mapper>

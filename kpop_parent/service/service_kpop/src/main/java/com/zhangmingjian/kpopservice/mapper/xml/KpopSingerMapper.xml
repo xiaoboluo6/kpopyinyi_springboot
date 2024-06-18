@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangmingjian.kpopservice.mapper.KpopSingerMapper">
+
+    <select id="getSingerListBySongId" resultType="com.zhangmingjian.kpopservice.entity.KpopSinger">
+        SELECT singer.*
+        FROM kpop_song_singer AS song_singer_related
+                 JOIN kpop_singer AS singer ON song_singer_related.singer_id = singer.id
+        WHERE
+            song_singer_related.song_id = #{songid}
+
+    </select>
+
+    <update id="updateSingerPopularity" parameterType="string">
+        UPDATE kpop_singer
+        SET popularity = popularity + 1
+        WHERE id = #{singerId}
+    </update>
+
+
+    <select id="getSingerFavouriteFront" resultType="com.zhangmingjian.kpopservice.entity.KpopSinger">
+        SELECT
+            s.*
+        FROM
+            kpop_singer_favourite sf
+                JOIN kpop_singer s ON sf.singer_id = s.id;
+    </select>
+
+
+</mapper>

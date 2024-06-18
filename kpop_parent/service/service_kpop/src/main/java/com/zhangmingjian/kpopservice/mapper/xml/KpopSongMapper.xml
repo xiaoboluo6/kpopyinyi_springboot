@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangmingjian.kpopservice.mapper.KpopSongMapper">
+    <select id="getSongBaseTrans" resultType="com.zhangmingjian.kpopservice.entity.vo.SongPublishVo">
+        select
+               song.name AS songName,
+               song.singer_name AS singerName,
+               song.popularity,
+               song.cover,
+               song.release_time AS releaseTime,
+               songtrans.transliteration
+        from
+            kpop_song song
+                LEFT JOIN kpop_song_transliteration songtrans on songtrans.song_id = song.id
+        WHERE
+            song.id=#{songId}
+    </select>
+
+
+    <select id="getSongListPageQuery" parameterType="com.zhangmingjian.kpopservice.entity.vo.SongListQuery"
+            resultType="com.zhangmingjian.kpopservice.entity.vo.SongListVo">
+        select
+            song.id AS id,
+            song.name AS songName,
+            song.cover,
+            song.release_time AS releaseTime,
+            song.status AS status,
+            singer.name AS singerName
+        from
+            kpop_song song
+                LEFT JOIN kpop_singer singer on singer.id = song.singer_id
+        WHERE
+		    1=1
+        <if test="songListQuery.songName != null and songListQuery.songName != ''">
+            AND song.name LIKE CONCAT('%', #{songListQuery.songName}, '%')
+        </if>
+        <if test="songListQuery.singerName != null and songListQuery.singerName != ''">
+            AND singer.name LIKE CONCAT('%', #{songListQuery.singerName}, '%')
+        </if>
+        <if test="songListQuery.status != null">
+            AND song.status = #{songListQuery.status}
+        </if>
+        LIMIT #{startIndex},#{pageSize}
+    </select>
+
+
+    <select id="getSongListQueryCount" parameterType="com.zhangmingjian.kpopservice.entity.vo.SongListQuery" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM kpop_song song
+        LEFT JOIN kpop_singer singer ON singer.id = song.singer_id
+        WHERE
+        1=1
+        <if test="songName != null and songName != ''">
+            AND song.name LIKE CONCAT('%', #{songName}, '%')
+        </if>
+        <if test="singerName != null and singerName != ''">
+            AND singer.name LIKE CONCAT('%', #{singerName}, '%')
+        </if>
+        <if test="status != null">
+            AND song.status = #{status}
+        </if>
+    </select>
+
+    <select id="getSongListBySingerId" resultType="com.zhangmingjian.kpopservice.entity.KpopSong">
+        SELECT kpop_song.*
+        FROM kpop_song
+                 JOIN kpop_song_singer ON kpop_song.id = kpop_song_singer.song_id
+        WHERE kpop_song_singer.singer_id = #{singerId}
+          AND kpop_song.is_deleted = 0
+          AND kpop_song.status = 1
+        ORDER BY kpop_song.release_time DESC;
+    </select>
+
+    <update id="updatePopularityById" parameterType="string">
+        UPDATE kpop_song
+        SET popularity = popularity + 1
+        WHERE id = #{songId}
+    </update>
+
+</mapper>

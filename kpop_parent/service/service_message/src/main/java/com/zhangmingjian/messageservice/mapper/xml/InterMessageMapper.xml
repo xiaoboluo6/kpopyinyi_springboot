@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangmingjian.messageservice.mapper.InterMessageMapper">
+
+    <update id="quickReply" parameterType="java.lang.String">
+        UPDATE inter_message
+        SET status = 1,
+            reply = "后台小编已经收到啦!"
+        WHERE id = #{messageId}
+    </update>
+
+    <update id="refreshMessage" parameterType="com.zhangmingjian.commonutils.vo.RefreshMemberInfo">
+        UPDATE inter_message
+        SET nickname = #{nickname},
+            avatar = #{avatar}
+        WHERE member_id = #{memberId};
+    </update>
+
+
+    <update id="disableMessageByMemberId">
+        UPDATE inter_message
+        SET is_deleted = 1
+        WHERE member_id = #{memberId};
+    </update>
+
+
+
+
+</mapper>

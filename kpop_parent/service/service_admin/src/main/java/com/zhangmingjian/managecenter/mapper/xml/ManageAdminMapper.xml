@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangmingjian.managecenter.mapper.ManageAdminMapper">
+    <update id="upgrade" parameterType="java.lang.String">
+        UPDATE manage_admin
+        SET type = 1
+        WHERE id = #{adminId}
+    </update>
+
+    <update id="downgrade" parameterType="java.lang.String">
+        UPDATE manage_admin
+        SET type = 0
+        WHERE id = #{adminId}
+    </update>
+
+    <update id="block" parameterType="java.lang.String">
+        UPDATE manage_admin
+        SET is_disabled = 1
+        WHERE id = #{adminId}
+    </update>
+
+    <update id="unblock" parameterType="java.lang.String">
+        UPDATE manage_admin
+        SET is_disabled = 0
+        WHERE id = #{adminId}
+    </update>
+</mapper>
